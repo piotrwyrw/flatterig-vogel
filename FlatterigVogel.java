@@ -20,6 +20,8 @@ public class FlatterigVogel extends JPanel
     public static double GESCHWINDIGKEIT_Y = 0.0;
     public static int SAULEN_ABSTAND = 300;
     
+    public GradientPaint backgroundPaint = new GradientPaint(BREITE / 2, HOEHE, Color.decode("#FFFACD"), BREITE / 2, 0, Color.decode("#87CEEB"));
+    
     public boolean punkteDomaene = false;
     
     public int punkte = 0;
@@ -112,7 +114,8 @@ public class FlatterigVogel extends JPanel
     }
     
     public void zeichnen(Graphics grafik) {
-        grafik.setColor(Color.decode("#1b1b1b"));
+        Graphics2D zweiDimensional = (Graphics2D) grafik;
+        zweiDimensional.setPaint(backgroundPaint);
         grafik.fillRect(0, 0, BREITE, HOEHE);
         
         grafik.setColor(Color.decode("#f1c40f"));
@@ -124,7 +127,7 @@ public class FlatterigVogel extends JPanel
             it.x -= 5;
         }
         
-        grafik.setColor(Color.decode("#ecf0f1"));
+        grafik.setColor(Color.BLACK);
         grafik.setFont(new Font("EB Garamond", Font.PLAIN, 60));
         grafik.drawString(String.valueOf(punkte), BREITE - 70, 70);
     }
