@@ -10,12 +10,12 @@ import java.util.concurrent.atomic.*;
 public class FlatterigVogel extends JPanel
 {
     
-    public static final int BREITE = 1000;
-    public static final int HOEHE = 700;
+    public static int BREITE = 1000;
+    public static int HOEHE = 700;
     public static final double ANZIEHUNGSKRAFT = 0.4;
     public static final double BESCHLEUNIGUNG_Y = ANZIEHUNGSKRAFT;
     public static final double MAX_GESCHWINDIGKEIT = 5.0;
-    public static final double SPRING_GESCHW = -10.0;
+    public static final double SPRING_GESCHW = -8.0;
     public static final int VOGEL_GROESSE = 25;
     public static final int PFAD_LAENGE = 10;
     
@@ -30,23 +30,28 @@ public class FlatterigVogel extends JPanel
     
     public List<Paar<Point, Double>> pfad = new ArrayList<>();
     
+    public JFrame frame;
+    
     public FlatterigVogel()
     {
         super();
         
-        JFrame frame = new JFrame("Der Flatterige Vogel");
+        frame = new JFrame("Der Flatterige Vogel");
         frame.setSize(BREITE, HOEHE);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        frame.setResizable(true);
+        frame.setMinimumSize(new Dimension(1000, 700));
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         
         frame.addKeyListener(new KeyListener() {
             public void keyReleased(KeyEvent evt) {
+                
+            }
+            public void keyPressed(KeyEvent evt) {
                 GESCHWINDIGKEIT_Y = SPRING_GESCHW;
             }
-            public void keyPressed(KeyEvent evt) {}
             public void keyTyped(KeyEvent evt) {}
         });
         
@@ -58,7 +63,7 @@ public class FlatterigVogel extends JPanel
                 repaint();
                 
                 long now = System.currentTimeMillis();
-                if (now - letzteSaule.get() > 2500) {
+                if (now - letzteSaule.get() > 250) {
                     letzteSaule.set(now);
                     neueSaule(BREITE);
                     
@@ -85,6 +90,10 @@ public class FlatterigVogel extends JPanel
     }
     
     public void spielAktualisieren() {
+        // "Responsive Design" lol
+        this.BREITE = this.frame.getWidth();
+        this.HOEHE = this.frame.getHeight();
+        
         this.GESCHWINDIGKEIT_Y += this.BESCHLEUNIGUNG_Y;
         
         if (this.GESCHWINDIGKEIT_Y > this.MAX_GESCHWINDIGKEIT) {
@@ -134,7 +143,7 @@ public class FlatterigVogel extends JPanel
         
         grafik.setColor(Color.BLACK);
         grafik.setFont(new Font("EB Garamond", Font.PLAIN, 60));
-        grafik.drawString(String.valueOf(punkte), BREITE - 70, 70);
+        grafik.drawString(String.valueOf(punkte), BREITE - grafik.getFontMetrics().stringWidth(String.valueOf(punkte)) - 70, 70);
         
         // Pfad berechnen und zeichnen
         this.pfad.add(new Paar(new Point(BREITE / 2, VOGEL_Y), 255.0));
@@ -142,12 +151,12 @@ public class FlatterigVogel extends JPanel
         Color originaleFarbe = Color.decode("#a29bfe");
 
         for (int i = 0; i < this.pfad.size(); i ++) {
-            this.pfad.get(i).value -= 10;
+            this.pfad.get(i).value -= 4;
             if (this.pfad.get(i).value <= 0) {
                 this.pfad.remove(i);
             }
             Point it = this.pfad.get(i).key;
-            it.x -= 0.5;
+            it.x -= 5;
             
             grafik.setColor(new Color(originaleFarbe.getRed(), originaleFarbe.getGreen(), originaleFarbe.getBlue(), (this.pfad.get(i).value).intValue()));
             
