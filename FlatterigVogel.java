@@ -14,20 +14,25 @@ public class FlatterigVogel extends JPanel
     public static int HOEHE = 700;
     public static final double ANZIEHUNGSKRAFT = 0.4;
     public static final double BESCHLEUNIGUNG_Y = ANZIEHUNGSKRAFT;
-    public static final double MAX_GESCHWINDIGKEIT = 5.0;
+    public static final double MAX_GESCHWINDIGKEIT = 50000.0;
     public static final double SPRING_GESCHW = -8.0;
     public static final int VOGEL_GROESSE = 25;
     public static final int PFAD_LAENGE = 10;
     public static final int SAULEN_ABSTAND = 300;
     public static final int SAULEN_ABST_ZUFAELLIGKEIT = -50;
+    public static final Color PFAD_FARBE = Color.decode("#f9ca24");
     
     public static double GESCHWINDIGKEIT_Y = 0.0;
     
-    public GradientPaint backgroundPaint = new GradientPaint(BREITE / 2, HOEHE, Color.decode("#FFFACD"), BREITE / 2, 0, Color.decode("#87CEEB"));
+    public static int SPEED = 5;
+    
+    public GradientPaint backgroundPaint;
     public boolean punkteDomaene = false;
     public int punkte = 0;
     public int VOGEL_Y = HOEHE / 2;
     public List<Saule> saulen = new ArrayList<>();
+    
+    public boolean verloren = false;
     
     public List<Paar<Point, Double>> pfad = new ArrayList<>();
     
@@ -47,11 +52,10 @@ public class FlatterigVogel extends JPanel
         frame.setVisible(true);
         
         frame.addKeyListener(new KeyListener() {
-            public void keyReleased(KeyEvent evt) {
-                
-            }
+            public void keyReleased(KeyEvent evt) {}
             public void keyPressed(KeyEvent evt) {
-                GESCHWINDIGKEIT_Y = SPRING_GESCHW;
+                if (!verloren)
+                    GESCHWINDIGKEIT_Y = SPRING_GESCHW;
             }
             public void keyTyped(KeyEvent evt) {}
         });
@@ -64,7 +68,7 @@ public class FlatterigVogel extends JPanel
                 repaint();
                 
                 long now = System.currentTimeMillis();
-                if (now - letzteSaule.get() > 1500) {
+                if (now - letzteSaule.get() > 1500 - Math.random() * 200) {
                     letzteSaule.set(now);
                     neueSaule(BREITE);
                     
@@ -80,6 +84,8 @@ public class FlatterigVogel extends JPanel
         this.pfad.clear();
         this.punkteDomaene = false;
         this.punkte = 0;
+        this.verloren = false;
+        this.SPEED = 5;
     }
     
     public void neueSaule(int x) {
@@ -104,15 +110,17 @@ public class FlatterigVogel extends JPanel
         
         this.VOGEL_Y += this.GESCHWINDIGKEIT_Y;
         
-        if (VOGEL_Y > HOEHE || VOGEL_Y < 0)
+        if (VOGEL_Y > HOEHE || VOGEL_Y < 0) {
             startNeuDurchfuhren();
+        }
         
         boolean punkte = false;
             
         for (int i = 0; i < this.saulen.size(); i ++) {
             Saule it = this.saulen.get(i);
             if (it.tutMitVogelKollidieren(BREITE / 2, VOGEL_Y)) {
-                startNeuDurchfuhren();
+                this.SPEED = -1;
+                this.verloren = true;
             }
             if (it.istVogelInDerPunkteDomaene(BREITE / 2, VOGEL_Y))
                 punkte = true;
@@ -127,37 +135,25 @@ public class FlatterigVogel extends JPanel
     }
     
     public void zeichnen(Graphics grafik) {
+        backgroundPaint = new GradientPaint(BREITE / 2, HOEHE, Color.decode("#FFFACD").brighter(), BREITE / 2, 0, Color.decode("#87CEEB"));
+        
         Graphics2D zweiDimensional = (Graphics2D) grafik;
         zweiDimensional.setPaint(backgroundPaint);
         grafik.fillRect(0, 0, BREITE, HOEHE);
         
         zweiDimensional.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
-        // Hier wird der Vogel gezeichnet
-        // grafik.setColor(Color.decode("#f1c40f"));
-        // grafik.fillRect(BREITE / 2 - VOGEL_GROESSE / 2, VOGEL_Y - VOGEL_GROESSE / 2, VOGEL_GROESSE, VOGEL_GROESSE);
-        
-        for (int i = 0; i < this.saulen.size(); i ++) {
-            Saule it = this.saulen.get(i);
-            it.zeichnen(grafik);
-            it.x -= 5;
-        }
-        
-        grafik.setColor(Color.BLACK);
-        grafik.setFont(new Font("EB Garamond", Font.PLAIN, 60));
-        grafik.drawString(String.valueOf(punkte), BREITE - grafik.getFontMetrics().stringWidth(String.valueOf(punkte)) - 70, 70);
-        
         // Pfad berechnen und zeichnen
-        this.pfad.add(new Paar(new Point(BREITE / 2, VOGEL_Y), 255.0));
+        this.pfad.add(new Paar(new Point(BREITE / 2 - VOGEL_GROESSE / 2, VOGEL_Y - VOGEL_GROESSE / 2), 255.0));
         
-        Color originaleFarbe = Color.decode("#a29bfe");
+        Color originaleFarbe = PFAD_FARBE;
 
         for (int i = 0; i < this.pfad.size(); i ++) {
             this.pfad.get(i).value -= 4;
             if (this.pfad.get(i).value <= 0)
                 this.pfad.remove(i);
             Point it = this.pfad.get(i).key;
-            it.x -= 5;
+            it.x -= SPEED;
             
             grafik.setColor(new Color(originaleFarbe.getRed(), originaleFarbe.getGreen(), originaleFarbe.getBlue(), (this.pfad.get(i).value).intValue()));
             
@@ -165,6 +161,20 @@ public class FlatterigVogel extends JPanel
             
             grafik.fillOval(it.x, it.y, (int) elementGroesse, (int) elementGroesse);
         }
+        
+        // Hier wird der Vogel gezeichnet
+        grafik.setColor(Color.RED);
+        grafik.drawRect(BREITE / 2 - VOGEL_GROESSE / 2, VOGEL_Y - VOGEL_GROESSE / 2, VOGEL_GROESSE, VOGEL_GROESSE);
+        
+        for (int i = 0; i < this.saulen.size(); i ++) {
+            Saule it = this.saulen.get(i);
+            it.zeichnen(grafik);
+            it.x -= SPEED;
+        }
+        
+        grafik.setColor(Color.BLACK);
+        grafik.setFont(new Font("EB Garamond", Font.PLAIN, 60));
+        grafik.drawString(String.valueOf(punkte), BREITE - grafik.getFontMetrics().stringWidth(String.valueOf(punkte)) - 70, 70);
     }
     
     @Override

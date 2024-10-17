@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=TestSzene
+comment1.params=
+comment1.target=void\ anfangen()
+comment2.params=
+comment2.target=boolean\ sollSchliessen()
+comment3.params=
+comment3.target=void\ aktualisieren()
+comment4.params=g
+comment4.target=void\ zeichnen(java.awt.Graphics)
+comment5.params=
+comment5.target=void\ beenden()
+numComments=6

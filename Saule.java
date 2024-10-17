@@ -25,7 +25,7 @@ public class Saule {
     }
     
     public static Saule zufallig(int x) {
-        return new Saule(x, 100 + (int) (Math.random() * 100));
+        return new Saule(x, 100 + (int) (Math.random() * 300));
     }
     
     private boolean rechteckBeinhaltet(int x, int y, int w, int h, int px, int py) {

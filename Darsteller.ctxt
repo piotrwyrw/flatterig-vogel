@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Darsteller
+comment1.params=
+comment1.target=void\ initialisieren()
+comment2.params=bezeichnung\ instanz
+comment2.target=void\ szeneHinzufuegen(java.lang.String,\ Szene)
+comment3.params=bezeichnung
+comment3.target=Szene\ holeSzene(java.lang.String)
+comment4.params=bezeichnung
+comment4.target=void\ szeneWaehlen(java.lang.String)
+comment5.params=
+comment5.target=void\ darstellungsProzessAnfangen()
+comment6.params=
+comment6.target=void\ run()
+comment7.params=g
+comment7.target=void\ paintComponent(java.awt.Graphics)
+numComments=8

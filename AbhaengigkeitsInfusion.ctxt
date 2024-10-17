@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=AbhaengigkeitsInfusion
+comment1.params=
+comment1.target=AbhaengigkeitsInfusion()
+comment2.params=
+comment2.target=AbhaengigkeitsInfusion\ instanz()
+comment3.params=klasse
+comment3.target=void\ abhaengigkeitMelden(java.lang.Class)
+comment4.params=
+comment4.target=void\ einspritzen()
+comment5.params=klasse
+comment5.target=java.lang.Object\ infusion(java.lang.Class)
+comment6.params=ziel
+comment6.target=void\ bereitMethodeAufrufen(java.lang.Object)
+comment7.params=ziel
+comment7.target=void\ klassenInfusion(java.lang.Object)
+numComments=8
