@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.*;
 
-public class FlatterigVogel extends JPanel
+public class FlatterigVogel extends Szene
 {
     
     public static int BREITE = 1000;
@@ -36,48 +36,31 @@ public class FlatterigVogel extends JPanel
     
     public List<Paar<Point, Double>> pfad = new ArrayList<>();
     
-    public JFrame frame;
+    public long letzteSauleZeit;
     
-    public FlatterigVogel()
-    {
-        super();
-        
-        frame = new JFrame("Der Flatterige Vogel");
-        frame.setSize(BREITE, HOEHE);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(true);
-        frame.setMinimumSize(new Dimension(1000, 700));
-        frame.add(this);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        
-        frame.addKeyListener(new KeyListener() {
-            public void keyReleased(KeyEvent evt) {}
-            public void keyPressed(KeyEvent evt) {
-                if (!verloren)
-                    GESCHWINDIGKEIT_Y = SPRING_GESCHW;
-            }
-            public void keyTyped(KeyEvent evt) {}
-        });
-        
-        AtomicReference<Long> letzteSaule = new AtomicReference<Long>(System.currentTimeMillis());
-        
-        new Timer(10, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                spielAktualisieren();
-                repaint();
-                
-                long now = System.currentTimeMillis();
-                if (now - letzteSaule.get() > 1500 - Math.random() * 200) {
-                    letzteSaule.set(now);
-                    neueSaule(BREITE);
-                    
-                }
-            }
-        }).start();
+    @Eingespritzt
+    public DarstellungsFenster fenster;
+    
+    @Bereit
+    public void initialisieren() {
+        letzteSauleZeit = System.currentTimeMillis();
     }
     
-    public void startNeuDurchfuhren() {
+    public void anfangen() {}
+    
+    public boolean sollSchliessen() {
+        return false;
+    }
+    
+    public void vielleichtSaulenGenerieren() {
+        long jetzt = System.currentTimeMillis();
+        if (jetzt - letzteSauleZeit > 1500 - Math.random() * 200) {
+            letzteSauleZeit = jetzt;
+            neueSaule(BREITE);
+        }
+    }
+    
+    public void neuStart() {
         VOGEL_Y = HOEHE / 2;
         GESCHWINDIGKEIT_Y = 0;
         this.saulen.clear();
@@ -88,19 +71,14 @@ public class FlatterigVogel extends JPanel
         this.SPEED = 5;
     }
     
-    public void neueSaule(int x) {
-        for (int i = 0; i < saulen.size(); i ++) {
-            // Unsichtbare Elemente werden entfernt
-            if (!this.saulen.get(i).istSichtbar())
-                this.saulen.remove(i);
-        }
-        this.saulen.add(Saule.zufallig(x));
-    }
-    
-    public void spielAktualisieren() {
-        // "Responsive Design" lol
-        this.BREITE = this.frame.getWidth();
-        this.HOEHE = this.frame.getHeight();
+    public void aktualisieren() {
+        vielleichtSaulenGenerieren();
+        
+        JFrame rahmen = fenster.rahmen;
+        
+        // Fenstergroessenempfindliches Design
+        this.BREITE = rahmen.getWidth();
+        this.HOEHE = rahmen.getHeight();
         
         this.GESCHWINDIGKEIT_Y += this.BESCHLEUNIGUNG_Y;
         
@@ -111,7 +89,7 @@ public class FlatterigVogel extends JPanel
         this.VOGEL_Y += this.GESCHWINDIGKEIT_Y;
         
         if (VOGEL_Y > HOEHE || VOGEL_Y < 0) {
-            startNeuDurchfuhren();
+            neuStart();
         }
         
         boolean punkte = false;
@@ -129,9 +107,13 @@ public class FlatterigVogel extends JPanel
         boolean altPunkte = this.punkteDomaene;
         this.punkteDomaene = punkte;
         
-        // "Falling edge" Detektor
+        // Ein Detektor der fallenden Kanten
         if (altPunkte && !punkte)
             this.punkte ++;
+    }
+    
+    public void tasteRunter() {
+        this.GESCHWINDIGKEIT_Y = this.SPRING_GESCHW;
     }
     
     public void zeichnen(Graphics grafik) {
@@ -150,8 +132,12 @@ public class FlatterigVogel extends JPanel
 
         for (int i = 0; i < this.pfad.size(); i ++) {
             this.pfad.get(i).value -= 4;
-            if (this.pfad.get(i).value <= 0)
+            
+            if (this.pfad.get(i).value <= 0) {
                 this.pfad.remove(i);
+                continue;
+            }
+            
             Point it = this.pfad.get(i).key;
             it.x -= SPEED;
             
@@ -177,9 +163,15 @@ public class FlatterigVogel extends JPanel
         grafik.drawString(String.valueOf(punkte), BREITE - grafik.getFontMetrics().stringWidth(String.valueOf(punkte)) - 70, 70);
     }
     
-    @Override
-    public void paintComponent(Graphics g) {
-        zeichnen(g);
+    public void beenden() {}
+
+    public void neueSaule(int x) {
+        for (int i = 0; i < saulen.size(); i ++) {
+            // Unsichtbare Elemente werden entfernt
+            if (!this.saulen.get(i).istSichtbar())
+                this.saulen.remove(i);
+        }
+        this.saulen.add(Saule.zufallig(x));
     }
     
 }

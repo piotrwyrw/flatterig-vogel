@@ -2,4 +2,10 @@
 comment0.target=DarstellungsFenster
 comment1.params=
 comment1.target=void\ initialisieren()
-numComments=2
+comment2.params=evt
+comment2.target=void\ keyReleased(java.awt.event.KeyEvent)
+comment3.params=evt
+comment3.target=void\ keyPressed(java.awt.event.KeyEvent)
+comment4.params=evt
+comment4.target=void\ keyTyped(java.awt.event.KeyEvent)
+numComments=5

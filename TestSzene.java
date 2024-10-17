@@ -14,5 +14,6 @@ public class TestSzene extends Szene {
         g.setColor(Color.RED);
         g.fillRect(0, 0, fenster.rahmen.getWidth(), fenster.rahmen.getHeight());
     }
+    public void tasteRunter() {}
     public void beenden() {}
 }

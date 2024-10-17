@@ -2,6 +2,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class Darsteller extends JPanel {
     
@@ -40,22 +44,27 @@ public class Darsteller extends JPanel {
     }
     
     public void darstellungsProzessAnfangen() {
-        new Thread() {
-            public void run() {
-                while (true) {
-                    if (gewaehlteSzene == null)
-                        continue;
+        new Timer(10, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (gewaehlteSzene == null)
+                    return;
                         
-                    if (gewaehlteSzene.sollSchliessen()) {
-                        gewaehlteSzene.beenden();
-                        System.exit(0);
-                    }
-                        
-                    gewaehlteSzene.aktualisieren();
-                    repaint();
+                if (gewaehlteSzene.sollSchliessen()) {
+                    gewaehlteSzene.beenden();
+                    System.exit(0);
                 }
+                    
+                gewaehlteSzene.aktualisieren();
+                repaint();
             }
-        };
+        }).start();
+    }
+    
+    public void tastenEreignis(KeyEvent evt) {
+        if (gewaehlteSzene == null)
+            return;
+            
+        gewaehlteSzene.tasteRunter();
     }
     
     @Override

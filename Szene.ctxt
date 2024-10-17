@@ -10,4 +10,6 @@ comment4.params=g
 comment4.target=void\ zeichnen(java.awt.Graphics)
 comment5.params=
 comment5.target=void\ beenden()
-numComments=6
+comment6.params=
+comment6.target=void\ tasteRunter()
+numComments=7

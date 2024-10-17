@@ -26,14 +26,26 @@ public class AbhaengigkeitsInfusion
     }
     
     // Zuerst werden alle infusionen durchgefuhrt und erst dann werden die @Bereit-Methoden aufgerufen
-    public void einspritzen() throws IllegalAccessException, InvocationTargetException {
+    public void einspritzen(Class<?>[] reihenfolge) throws IllegalAccessException, InvocationTargetException {
         for (Class<?> klasse : abhaengigkeiten.keySet()) {
             Object instanz = abhaengigkeiten.get(klasse);
             klassenInfusion(instanz);
         }
         
-        for (Class<?> klasse : abhaengigkeiten.keySet()) {
+        if (reihenfolge == null) {
+            for (Class<?> klasse : abhaengigkeiten.keySet()) {
+                Object instanz = abhaengigkeiten.get(klasse);
+                bereitMethodeAufrufen(instanz);
+            }
+            return;
+        }
+        
+        for (Class<?> klasse : reihenfolge) {
             Object instanz = abhaengigkeiten.get(klasse);
+            
+            if (instanz == null)
+                throw new RuntimeException("Die Reihenfolge des Einspritzens beinhaltet eine Klasse, die nicht als eine Abhaengigkeit deklariert wurde: '" + klasse.getSimpleName() + "'");
+            
             bereitMethodeAufrufen(instanz);
         }
     }

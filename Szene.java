@@ -6,4 +6,5 @@ public abstract class Szene {
     public abstract void aktualisieren();
     public abstract void zeichnen(Graphics g);
     public abstract void beenden();
+    public abstract void tasteRunter();
 }

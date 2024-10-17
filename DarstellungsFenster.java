@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.Dimension;
+import java.awt.event.*;
 
 public class DarstellungsFenster {
     
     public static final int START_BREITE = 1500;
-    public static final int START_HOEHE = 700;
+    public static final int START_HOEHE = 900;
     
     public JFrame rahmen;
     
@@ -13,6 +14,9 @@ public class DarstellungsFenster {
     
     @Eingespritzt
     private TestSzene testSzene;
+    
+    @Eingespritzt
+    private FlatterigVogel vogelSzene;
     
     @Bereit
     public void initialisieren() {
@@ -25,8 +29,16 @@ public class DarstellungsFenster {
         rahmen.add(darsteller);
         rahmen.setVisible(true);
         
-        darsteller.szeneHinzufuegen("test", testSzene);
-        darsteller.szeneWaehlen("test");
+        rahmen.addKeyListener(new KeyListener() {
+            public void keyReleased(KeyEvent evt) {}
+            public void keyPressed(KeyEvent evt) {
+                darsteller.tastenEreignis(evt);
+            }
+            public void keyTyped(KeyEvent evt) {}
+        });
+        
+        darsteller.szeneHinzufuegen("vogel", vogelSzene);
+        darsteller.szeneWaehlen("vogel");
         darsteller.darstellungsProzessAnfangen();
     }
     
