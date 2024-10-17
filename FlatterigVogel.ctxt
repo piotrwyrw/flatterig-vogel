@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=FlatterigVogel
+comment1.params=
+comment1.target=FlatterigVogel()
+comment10.params=g
+comment10.target=void\ paintComponent(java.awt.Graphics)
+comment2.params=evt
+comment2.target=void\ keyReleased(java.awt.event.KeyEvent)
+comment3.params=evt
+comment3.target=void\ keyPressed(java.awt.event.KeyEvent)
+comment4.params=evt
+comment4.target=void\ keyTyped(java.awt.event.KeyEvent)
+comment5.params=e
+comment5.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment6.params=
+comment6.target=void\ startNeuDurchfuhren()
+comment7.params=x
+comment7.target=void\ neueSaule(int)
+comment8.params=
+comment8.target=void\ spielAktualisieren()
+comment9.params=grafik
+comment9.target=void\ zeichnen(java.awt.Graphics)
+numComments=11

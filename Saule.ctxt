@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Saule
+comment1.params=x\ top
+comment1.target=Saule(int,\ int)
+comment2.params=grafik
+comment2.target=void\ zeichnen(java.awt.Graphics)
+comment3.params=
+comment3.target=boolean\ istSichtbar()
+comment4.params=x
+comment4.target=Saule\ zufallig(int)
+comment5.params=x\ y\ w\ h\ px\ py
+comment5.target=boolean\ rechteckBeinhaltet(int,\ int,\ int,\ int,\ int,\ int)
+comment6.params=vogelX\ vogelY
+comment6.target=boolean\ tutMitVogelKollidieren(int,\ int)
+comment7.params=vogelX\ vogelY
+comment7.target=boolean\ istVogelInDerPunkteDomaene(int,\ int)
+numComments=8
