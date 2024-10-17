@@ -18,9 +18,10 @@ public class FlatterigVogel extends JPanel
     public static final double SPRING_GESCHW = -8.0;
     public static final int VOGEL_GROESSE = 25;
     public static final int PFAD_LAENGE = 10;
+    public static final int SAULEN_ABSTAND = 300;
+    public static final int SAULEN_ABST_ZUFAELLIGKEIT = -50;
     
     public static double GESCHWINDIGKEIT_Y = 0.0;
-    public static int SAULEN_ABSTAND = 300;
     
     public GradientPaint backgroundPaint = new GradientPaint(BREITE / 2, HOEHE, Color.decode("#FFFACD"), BREITE / 2, 0, Color.decode("#87CEEB"));
     public boolean punkteDomaene = false;
@@ -63,7 +64,7 @@ public class FlatterigVogel extends JPanel
                 repaint();
                 
                 long now = System.currentTimeMillis();
-                if (now - letzteSaule.get() > 250) {
+                if (now - letzteSaule.get() > 1500) {
                     letzteSaule.set(now);
                     neueSaule(BREITE);
                     
@@ -83,6 +84,7 @@ public class FlatterigVogel extends JPanel
     
     public void neueSaule(int x) {
         for (int i = 0; i < saulen.size(); i ++) {
+            // Unsichtbare Elemente werden entfernt
             if (!this.saulen.get(i).istSichtbar())
                 this.saulen.remove(i);
         }
@@ -152,9 +154,8 @@ public class FlatterigVogel extends JPanel
 
         for (int i = 0; i < this.pfad.size(); i ++) {
             this.pfad.get(i).value -= 4;
-            if (this.pfad.get(i).value <= 0) {
+            if (this.pfad.get(i).value <= 0)
                 this.pfad.remove(i);
-            }
             Point it = this.pfad.get(i).key;
             it.x -= 5;
             
