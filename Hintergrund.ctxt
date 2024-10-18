@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.target=Hintergrund
 comment1.params=ressource\ geschwindigkeit\ breite\ hoehe
-comment1.target=Hintergrund(java.awt.image.BufferedImage,\ int,\ int,\ int)
+comment1.target=Hintergrund(java.awt.image.BufferedImage,\ double,\ int,\ int)
 comment2.params=breite\ hoehe
 comment2.target=void\ aktualisieren(int,\ int)
 comment3.params=grafik

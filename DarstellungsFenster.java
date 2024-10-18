@@ -23,7 +23,7 @@ public class DarstellungsFenster {
         rahmen = new JFrame("Der Flatternde Vogel");
         rahmen.setSize(START_BREITE, START_HOEHE);
         rahmen.setMinimumSize(new Dimension(START_BREITE, START_HOEHE));
-        rahmen.setResizable(true);
+        rahmen.setResizable(false);
         rahmen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         rahmen.setLocationRelativeTo(null);
         rahmen.add(darsteller);

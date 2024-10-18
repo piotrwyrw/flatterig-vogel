@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=ZusammengesetzterHintergrund
+comment1.params=breite\ hoehe
+comment1.target=ZusammengesetzterHintergrund(int,\ int)
+comment2.params=ressource\ geschwindigkeit
+comment2.target=void\ neueSchicht(java.awt.image.BufferedImage,\ double)
+comment3.params=grafik\ breite\ hoehe
+comment3.target=void\ zeichnen(java.awt.Graphics,\ int,\ int)
+numComments=4

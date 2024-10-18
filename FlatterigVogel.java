@@ -20,13 +20,14 @@ public class FlatterigVogel extends Szene
     public static final int PFAD_LAENGE = 10;
     public static final int SAULEN_ABSTAND = 300;
     public static final int SAULEN_ABST_ZUFAELLIGKEIT = -50;
-    public static final Color PFAD_FARBE = Color.decode("#f9ca24");
+    public static final Color PFAD_FARBE = Color.decode("#778beb");
     
     public static double GESCHWINDIGKEIT_Y = 0.0;
     
-    public static int SPEED = 5;
+    public static int ORIGINAL_GESCHWINDIGKEIT = 10;
     
-    public GradientPaint backgroundPaint;
+    public static int SPEED = ORIGINAL_GESCHWINDIGKEIT;
+    
     public boolean punkteDomaene = false;
     public int punkte = 0;
     public int VOGEL_Y = HOEHE / 2;
@@ -43,16 +44,19 @@ public class FlatterigVogel extends Szene
     
     @Eingespritzt
     public RessourcenVerwaltung ressourcen;
-    
-    public BufferedImage himmel;
-    
-    public Hintergrund hintergrund;
+        
+    public ZusammengesetzterHintergrund hintergrund;
     
     @Bereit
     public void initialisieren() {
         letzteSauleZeit = System.currentTimeMillis();
-        himmel = this.ressourcen.ressourceHolen("himmel");
-        hintergrund = new Hintergrund(himmel, -3, BREITE, HOEHE);
+        hintergrund = new ZusammengesetzterHintergrund(BREITE, HOEHE);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg1"), -this.SPEED);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg2"), -this.SPEED/2);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg3"), -this.SPEED/3);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg4"), -this.SPEED/4);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg5"), -this.SPEED/5);
+        hintergrund.neueSchicht(ressourcen.ressourceHolen("bg6"), -this.SPEED/6);
     }
     
     public void anfangen() {}
@@ -77,7 +81,7 @@ public class FlatterigVogel extends Szene
         this.punkteDomaene = false;
         this.punkte = 0;
         this.verloren = false;
-        this.SPEED = 5;
+        this.SPEED = ORIGINAL_GESCHWINDIGKEIT;
     }
     
     public void aktualisieren() {
@@ -106,7 +110,7 @@ public class FlatterigVogel extends Szene
         for (int i = 0; i < this.saulen.size(); i ++) {
             Saule it = this.saulen.get(i);
             if (it.tutMitVogelKollidieren(BREITE / 2, VOGEL_Y)) {
-                this.SPEED = -1;
+                this.SPEED = -5;
                 this.verloren = true;
             }
             if (it.istVogelInDerPunkteDomaene(BREITE / 2, VOGEL_Y))
@@ -122,18 +126,20 @@ public class FlatterigVogel extends Szene
     }
     
     public void tasteRunter() {
+        if (verloren)
+            return;
+        
         this.GESCHWINDIGKEIT_Y = this.SPRING_GESCHW;
     }
     
-    public void hintergrundZeichnen(Graphics grafik) {
-        if (hintergrund == null)
-            return;
-        
-        hintergrund.aktualisierenUndZeichnen(BREITE, HOEHE, grafik);
-    }
-    
     public void zeichnen(Graphics grafik) {
-        hintergrundZeichnen(grafik);
+        hintergrund.zeichnen(grafik, BREITE, HOEHE);
+        
+        for (int i = 0; i < this.saulen.size(); i ++) {
+            Saule it = this.saulen.get(i);
+            it.zeichnen(grafik);
+            it.x -= SPEED;
+        }
         
         Graphics2D zweiDimensional = (Graphics2D) grafik;
         zweiDimensional.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -144,7 +150,7 @@ public class FlatterigVogel extends Szene
         Color originaleFarbe = PFAD_FARBE;
 
         for (int i = 0; i < this.pfad.size(); i ++) {
-            this.pfad.get(i).value -= 4;
+            this.pfad.get(i).value -= 6;
             
             if (this.pfad.get(i).value <= 0) {
                 this.pfad.remove(i);
@@ -162,14 +168,8 @@ public class FlatterigVogel extends Szene
         }
         
         // Hier wird der Vogel gezeichnet
-        grafik.setColor(Color.RED);
-        grafik.drawRect(BREITE / 2 - VOGEL_GROESSE / 2, VOGEL_Y - VOGEL_GROESSE / 2, VOGEL_GROESSE, VOGEL_GROESSE);
-        
-        for (int i = 0; i < this.saulen.size(); i ++) {
-            Saule it = this.saulen.get(i);
-            it.zeichnen(grafik);
-            it.x -= SPEED;
-        }
+        // grafik.setColor(Color.RED);
+        // grafik.drawRect(BREITE / 2 - VOGEL_GROESSE / 2, VOGEL_Y - VOGEL_GROESSE / 2, VOGEL_GROESSE, VOGEL_GROESSE);
         
         grafik.setColor(Color.BLACK);
         grafik.setFont(new Font("EB Garamond", Font.PLAIN, 60));

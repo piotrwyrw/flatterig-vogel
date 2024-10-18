@@ -2,6 +2,18 @@ import java.awt.*;
 
 public class Saule {
     
+    public static final Color[] COLORS = {
+        Color.decode("#46eb8b"),
+        Color.decode("#27ae60"),
+        Color.decode("#46eb8b")
+    };
+    
+    public static final float[] FRACTIONS = {
+        0.0f,
+        0.5f,
+        1.0f
+    };
+    
     public static final int BREITE = 50;
     
     public int x;
@@ -15,7 +27,9 @@ public class Saule {
     public void zeichnen(Graphics grafik) {
         grafik.setColor(Color.decode("#27ae60"));
         
-        // Zeichne den oberen Teil der Saeule
+        LinearGradientPaint columnGradient = new LinearGradientPaint(x, 0, x + BREITE, 0, FRACTIONS, COLORS);
+        ((Graphics2D) grafik).setPaint(columnGradient);
+        
         grafik.fillRect(x, 0, BREITE, top);
         grafik.fillRect(x, top + FlatterigVogel.SAULEN_ABSTAND, BREITE, FlatterigVogel.HOEHE);
     }
