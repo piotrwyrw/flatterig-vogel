@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.*;
+import java.awt.image.*;
 
 public class FlatterigVogel extends Szene
 {
-    
     public static int BREITE = 1000;
     public static int HOEHE = 700;
     public static final double ANZIEHUNGSKRAFT = 0.4;
@@ -41,9 +41,18 @@ public class FlatterigVogel extends Szene
     @Eingespritzt
     public DarstellungsFenster fenster;
     
+    @Eingespritzt
+    public RessourcenVerwaltung ressourcen;
+    
+    public BufferedImage himmel;
+    
+    public Hintergrund hintergrund;
+    
     @Bereit
     public void initialisieren() {
         letzteSauleZeit = System.currentTimeMillis();
+        himmel = this.ressourcen.ressourceHolen("himmel");
+        hintergrund = new Hintergrund(himmel, -3, BREITE, HOEHE);
     }
     
     public void anfangen() {}
@@ -116,13 +125,17 @@ public class FlatterigVogel extends Szene
         this.GESCHWINDIGKEIT_Y = this.SPRING_GESCHW;
     }
     
+    public void hintergrundZeichnen(Graphics grafik) {
+        if (hintergrund == null)
+            return;
+        
+        hintergrund.aktualisierenUndZeichnen(BREITE, HOEHE, grafik);
+    }
+    
     public void zeichnen(Graphics grafik) {
-        backgroundPaint = new GradientPaint(BREITE / 2, HOEHE, Color.decode("#FFFACD").brighter(), BREITE / 2, 0, Color.decode("#87CEEB"));
+        hintergrundZeichnen(grafik);
         
         Graphics2D zweiDimensional = (Graphics2D) grafik;
-        zweiDimensional.setPaint(backgroundPaint);
-        grafik.fillRect(0, 0, BREITE, HOEHE);
-        
         zweiDimensional.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
         // Pfad berechnen und zeichnen

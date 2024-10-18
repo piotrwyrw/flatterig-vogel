@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=RessourcenVerwaltung
+comment1.params=
+comment1.target=void\ initialisieren()
+comment2.params=bezeichnung\ bild
+comment2.target=void\ ressourceMelden(java.lang.String,\ java.awt.image.BufferedImage)
+comment3.params=bezeichnung\ datei
+comment3.target=void\ ressourceMelden(java.lang.String,\ java.io.File)
+comment4.params=bezeichnung
+comment4.target=java.awt.image.BufferedImage\ ressourceHolen(java.lang.String)
+numComments=5
