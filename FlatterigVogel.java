@@ -133,7 +133,8 @@ public class FlatterigVogel extends Szene
     }
     
     public void zeichnen(Graphics grafik) {
-        hintergrund.zeichnen(grafik, BREITE, HOEHE);
+        if (this.hintergrund != null)
+            hintergrund.zeichnen(grafik, BREITE, HOEHE);
         
         for (int i = 0; i < this.saulen.size(); i ++) {
             Saule it = this.saulen.get(i);
